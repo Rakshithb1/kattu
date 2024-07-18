@@ -36,5 +36,5 @@ jobs:
         if: success() || failure()
         with:
           name: test-reports
-          path: ${{ inputs.BUILD_ARTIFACT }}
+          path: ${{ inputs.SERVICE_LOCATION }}/${{ inputs.BUILD_ARTIFACT }}
         

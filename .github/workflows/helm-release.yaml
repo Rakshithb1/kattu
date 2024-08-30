@@ -92,10 +92,9 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5.0.2
         with:
-          commit-message: Updated chart versions, image and tag for release changes
-          #title: ${{ github.event.inputs.COMMIT_MESSAGE }}
+          commit-message: Updated Pom versions for release changes
           title: Release changes
-          body: Automated PR for release.
+          body: Automated PR for ${{ github.event.inputs.BASE }} release.
           branch: releas-branch
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}

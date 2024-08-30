@@ -21,9 +21,9 @@ on:
         default: 'tag: develop'
         type: string
       NEW_TAG:
-        description: 'New tag to replace in values.yaml (e.g., tag: v1.0.0)'
+        description: 'New tag to replace in values.yaml (e.g., tag: 1.0.0)'
         required: true
-        default: 'tag: v1.0.0'
+        default: 'tag: 1.0.0'
         type: string
       OLD_IMAGE:
         description: 'Old Docker image to replace (e.g., mosipqa/)'

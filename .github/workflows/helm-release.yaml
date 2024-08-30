@@ -11,10 +11,6 @@ on:
         description: 'Repo Branch'
         required: true
         type: string
-      RELEASE_BRANCH:
-        description: 'Release branch'
-        required: true
-        type: string
       CHART_VERSION:
         description: 'Version to update in Chart.yaml files'
         required: true
@@ -37,6 +33,10 @@ on:
         description: 'New Docker image to replace with (e.g., mosipid/)'
         required: false
         type: string
+      RELEASE_BRANCH:
+        description: 'Release branch'
+        required: true
+        type: string  
     secrets:
       ACTION_PAT:
         required: true

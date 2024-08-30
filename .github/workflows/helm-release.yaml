@@ -41,10 +41,6 @@ on:
         description: 'commit message'
         required: true
         type: string
-      RELEASE_VERSION:
-        description: ' Release version'
-        required: true
-        type: string  
     secrets:
       ACTION_PAT:
         required: true
@@ -90,7 +86,7 @@ jobs:
         with:
           commit-message: Updated chart versions, image and tag for release changes
           title: ${{ github.event.inputs.COMMIT_MESSAGE }}
-          body: Automated PR for ${{ github.event.inputs.RELEASE_VERSION }} release.
+          body: Automated PR for release.
           branch: releas-branch
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}

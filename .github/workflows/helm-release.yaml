@@ -1,4 +1,4 @@
-name: helm-release Preparation.
+name: Helm-release Preparation.
 
 on:
   workflow_call:
@@ -10,7 +10,7 @@ on:
       REPO_BRANCH:
         required: true
         type: string
-      RELEASE_TAG:
+      RELEASE_BRANCH:
         description: 'tag to update'
         required: true
         type: string
@@ -19,12 +19,12 @@ on:
         required: true
         type: string
       OLD_TAG:
-        description: 'Old tag to replace (e.g., tag: develop)'
+        description: 'Old tag to replace in values.yaml (e.g., tag: develop)'
         required: true
         default: 'tag: develop'
         type: string
       NEW_TAG:
-        description: 'New tag to replace with (e.g., tag: v1.0.0)'
+        description: 'New tag to replace in values.yaml (e.g., tag: v1.0.0)'
         required: true
         default: 'tag: v1.0.0'
         type: string
@@ -36,16 +36,12 @@ on:
         description: 'New Docker image to replace with (e.g., mosipid/)'
         required: false
         type: string
-      BASE:
-        description: 'base branch for PR'
-        required: true
-        type: string
     secrets:
       ACTION_PAT:
         required: true
 
 jobs:
-  maven-release-preparation:
+  helm-release-preparation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -85,10 +81,10 @@ jobs:
         with:
           commit-message: Updated chart versions, image and tag for release changes
           title: Release changes
-          body: Automated PR for ${{ github.event.inputs.RELEASE_TAG }} release.
-          branch: test-release1
+          body: Automated PR for ${{ github.event.inputs.RELEASE_BRANCH }} release.
+          branch: ${{ github.event.inputs.RELEASE_BRANCH }}
           delete-branch: true
-          base: ${{ github.event.inputs.BASE }}
+          base: ${{ github.event.inputs.REPO_BRANCH }}
           token: ${{ secrets.ACTION_PAT }}
           signoff: true
           

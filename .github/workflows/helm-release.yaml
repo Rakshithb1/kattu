@@ -29,11 +29,11 @@ on:
         default: 'tag: v1.0.0'
         type: string
       OLD_IMAGE:
-        description: 'Old Docker image line to replace (e.g., mosipqa/)'
+        description: 'Old Docker image to replace (e.g., mosipqa/)'
         required: false
         type: string
       NEW_IMAGE:
-        description: 'New Docker image line to replace with (e.g., mosipid/)'
+        description: 'New Docker image to replace with (e.g., mosipid/)'
         required: false
         type: string
       BASE:
@@ -83,10 +83,10 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5.0.2
         with:
-          commit-message: Updated Pom versions for release changes
+          commit-message: Updated chart versions, image and tag for release changes
           title: Release changes
           body: Automated PR for ${{ github.event.inputs.RELEASE_TAG }} release.
-          branch: release-branch1
+          branch: test-release1
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}
           token: ${{ secrets.ACTION_PAT }}

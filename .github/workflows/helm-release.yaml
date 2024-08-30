@@ -74,12 +74,19 @@ jobs:
             if [ -z "$OLD_IMAGE" ] || [ -z "$NEW_IMAGE" ]; then
               sed -i 's|mosipqa/|mosipid/|g' "$file"
               sed -i 's|mosipdev/|mosipid/|g' "$file"
-              sed -i 's|mosipdev1/|mosipid/|g' "$file"
+              sed -i 's|mosipdev2/|mosipid/|g' "$file"
+              sed -i 's|mosipint/|mosipid/|g' "$file"
             else
               sed -i "s|$OLD_IMAGE|$NEW_IMAGE|g" "$file"
             fi
             sed -i "s|$OLD_TAG|$NEW_TAG|g" "$file"
-          done     
+          done
+          
+           #IMAGE="${{ github.event.inputs.IMAGE }}"
+           #sed -i 's|mosipqa/|$IMAGE|g' "$file"
+           #sed -i 's|mosipdev/|$IMAGE|g' "$file"
+           #sed -i 's|mosipdev2/|$IMAGE|g' "$file"
+           #sed -i 's|mosipint/|$IMAGE|g' "$file"
       
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5.0.2

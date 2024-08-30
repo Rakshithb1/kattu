@@ -8,10 +8,11 @@ on:
         required: true
         type: string
       REPO_BRANCH:
+        description: 'Repo Branch'
         required: true
         type: string
       RELEASE_BRANCH:
-        description: 'tag to update'
+        description: 'Release branch'
         required: true
         type: string
       CHART_VERSION:

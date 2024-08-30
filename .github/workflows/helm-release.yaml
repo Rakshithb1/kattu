@@ -80,7 +80,7 @@ jobs:
           commit-message: Updated chart versions, image and tag for release changes
           title: ${{ github.event.inputs.COMMIT_MESSAGE }}
           body: Automated PR for release.
-          branch: releas-branch
+          branch: releas-branch2
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}
           token: ${{ secrets.ACTION_PAT }}

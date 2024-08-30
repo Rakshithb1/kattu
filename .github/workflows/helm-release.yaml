@@ -90,7 +90,7 @@ jobs:
            #sed -i "s|$OLD_TAG|$NEW_TAG|g" "$file"
           
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5.0.2
+        uses: peter-evans/create-pull-request@v6.1.0
         with:
           commit-message: Updated Pom versions for release changes
           title: Release changes

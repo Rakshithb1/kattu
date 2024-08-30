@@ -123,7 +123,7 @@ jobs:
           commit-message: Updated Pom versions for release changes
           title: Release changes
           body: Automated PR for ${{ github.event.inputs.RELEASE_TAG }} release.
-          branch: releas-branch1
+          branch: releas-branch
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}
           token: ${{ secrets.ACTION_PAT }}

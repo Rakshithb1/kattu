@@ -93,7 +93,8 @@ jobs:
         uses: peter-evans/create-pull-request@v5.0.2
         with:
           commit-message: Updated chart versions, image and tag for release changes
-          title: ${{ github.event.inputs.COMMIT_MESSAGE }}
+          #title: ${{ github.event.inputs.COMMIT_MESSAGE }}
+          title: Release changes
           body: Automated PR for release.
           branch: releas-branch
           delete-branch: true

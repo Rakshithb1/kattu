@@ -33,8 +33,16 @@ on:
         description: 'New Docker image to replace with (e.g., mosipid/)'
         required: false
         type: string
-      RELEASE_BRANCH:
-        description: 'Release branch'
+      BASE:
+        description: 'base branch for PR'
+        required: true
+        type: string
+      COMMIT_MESSAGE:
+        description: 'commit message'
+        required: true
+        type: string
+      RELEASE_VERSION:
+        description: ' Release version'
         required: true
         type: string  
     secrets:
@@ -81,11 +89,11 @@ jobs:
         uses: peter-evans/create-pull-request@v5.0.2
         with:
           commit-message: Updated chart versions, image and tag for release changes
-          title: Release changes
-          body: Automated PR for ${{ github.event.inputs.RELEASE_BRANCH }} release.
-          branch: ${{ github.event.inputs.RELEASE_BRANCH }}
+          title: ${{ github.event.inputs.COMMIT_MESSAGE }}
+          body: Automated PR for ${{ github.event.inputs.RELEASE_VERSION }} release.
+          branch: releas-branch
           delete-branch: true
-          base: ${{ github.event.inputs.REPO_BRANCH }}
+          base: ${{ github.event.inputs.BASE }}
           token: ${{ secrets.ACTION_PAT }}
           signoff: true
           

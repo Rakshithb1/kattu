@@ -83,10 +83,11 @@ jobs:
           done
 
            #IMAGE="${{ github.event.inputs.IMAGE }}"
-           #sed -i 's|mosipqa/|$IMAGE|g' "$file"
-           #sed -i 's|mosipdev/|$IMAGE|g' "$file"
-           #sed -i 's|mosipdev2/|$IMAGE|g' "$file"
-           #sed -i 's|mosipint/|$IMAGE|g' "$file"
+           #sed -i "s|mosipqa/|$IMAGE|g" "$file"
+           #sed -i "s|mosipdev/|$IMAGE|g" "$file"
+           #sed -i "s|mosipdev2/|$IMAGE|g" "$file"
+           #sed -i "s|mosipint/|$IMAGE|g" "$file"
+           #sed -i "s|$OLD_TAG|$NEW_TAG|g" "$file"
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5.0.2
@@ -94,7 +95,7 @@ jobs:
           commit-message: Updated chart versions, image and tag for release changes
           title: ${{ github.event.inputs.COMMIT_MESSAGE }}
           body: Automated PR for release.
-          branch: releas-branch2
+          branch: releas-branch
           delete-branch: true
           base: ${{ github.event.inputs.BASE }}
           token: ${{ secrets.ACTION_PAT }}

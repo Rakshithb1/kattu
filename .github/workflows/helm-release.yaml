@@ -77,11 +77,11 @@ jobs:
           for file in $values_files; do
             echo "Processing $file"
             
-            # Replace any prefix before the '/' in the repository field with 'mosipid'
-            yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            # Replace the repository prefix with 'mosipid'
+            yq eval 'select(di == 0) | .. | select(has("repository")) | .repository |= sub("^[^/]+", "mosipid")' -i "$file"
           
             # Replace the tag with the provided input
-            yq eval ".image.tag = \"$new_tag\"" -i "$file"
+            yq eval "select(di == 0) | .. | select(has(\"tag\")) | .tag = \"$new_tag\"" -i "$file"
   
             echo "Updated $file"
           done

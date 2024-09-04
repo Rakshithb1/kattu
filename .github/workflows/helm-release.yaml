@@ -76,11 +76,11 @@ jobs:
           for file in $values_files; do
             echo "Processing $file"
             
-            # Update the repository and tag where 'mosip' is found in the repository name
-            yq eval '(.[] | select(.image.repository | contains("mosip")) | .image.repository) |= sub("^[^/]+", "mosipid")' -i "$file"
-            
-            # Update the tag for the same entries
-            yq eval '(.[] | select(.image.repository | contains("mosip")) | .image.tag) = "'$new_tag'"' -i "$file"
+            # Replace any prefix before the '/' in the repository field with 'mosipid'
+           yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+          
+           # Replace the tag with the provided input
+           yq eval ".image.tag = \"$new_tag\"" -i "$file"
   
             echo "Updated $file"
           done

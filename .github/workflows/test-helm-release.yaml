@@ -40,11 +40,6 @@ jobs:
           repository: ${{ inputs.REPO_URL }}
           ref: ${{ inputs.REPO_BRANCH }}
 
-      - name: Install yq
-        run: |
-          sudo wget https://github.com/mikefarah/yq/releases/download/v4.16.2/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq 
-
       - name: Find and Update Chart Versions
         run: |
           VERSION_INPUT="${{ github.event.inputs.CHART_VERSION }}"
@@ -52,8 +47,6 @@ jobs:
             yq eval ".version = \"$VERSION_INPUT\"" -i "$chart_file"
             echo "Updated version in $chart_file to $VERSION_INPUT"
           done
-
-  
  
       - name: Find and update values.yaml
         run: |
@@ -63,13 +56,12 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
-            yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file" --no-colors
-            yq eval ".image.tag = \"$new_tag\"" -i "$file" --no-colors
+            yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            yq eval ".image.tag = \"$new_tag\"" -i "$file"
+            yq eval '.job.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            yq eval ".job.image.tag = \"$new_tag\"" -i "$file"
             echo "Updated $file"
           done
-
-      - name: Check yq version
-        run: yq --version
     
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6.1.0

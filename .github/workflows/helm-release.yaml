@@ -54,7 +54,6 @@ jobs:
           new_tag="${{ github.event.inputs.Image_TAG }}"
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
-            echo "Processing $file"
             sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
             sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
             echo "Updated $file"

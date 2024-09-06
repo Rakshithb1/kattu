@@ -54,7 +54,8 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
-            sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
+            #sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
+            sed -i -e '/repository:.*mosip/ { :a; N; /repository:.*mosip/! { /tag:/s/tag: .*/tag: '"$new_tag"'/; ba } }' "$file"
             echo "Updated $file"
           done
           

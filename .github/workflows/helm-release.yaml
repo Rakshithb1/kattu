@@ -72,7 +72,7 @@ jobs:
           new_tag="${{ github.event.inputs.IMAGE_TAG }}"
           
           # Find the values.yaml file in the repository
-          values_file=$(find . -name "values.yaml")
+          values_files=$(find . -name "values.yaml")
           echo "test $values_file"
           for file in $values_files; do
             echo "Processing $file"

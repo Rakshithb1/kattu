@@ -40,24 +40,44 @@ jobs:
           repository: ${{ inputs.REPO_URL }}
           ref: ${{ inputs.REPO_BRANCH }}
 
+      #- name: Find and Update Chart Versions
+      #  run: |
+          #VERSION_INPUT="${{ github.event.inputs.CHART_VERSION }}"
+          #find . -type f -name Chart.yaml | while read -r chart_file; do
+           # sed -i "s/^version: .*/version: $VERSION_INPUT/" "$chart_file"
+           # echo "Updated version in $chart_file to $VERSION_INPUT"
+         # done     
+
       - name: Find and Update Chart Versions
         run: |
           VERSION_INPUT="${{ github.event.inputs.CHART_VERSION }}"
           find . -type f -name Chart.yaml | while read -r chart_file; do
-            sed -i "s/^version: .*/version: $VERSION_INPUT/" "$chart_file"
-            echo "Updated version in $chart_file to $VERSION_INPUT"
-          done     
+            yq eval ".version = \"$VERSION_INPUT\"" -i "$chart_file"
+          done
 
   
-      - name: Find and update repository and tag
+     # - name: Find and update repository and tag
+      #  run: |
+      #    new_tag="${{ github.event.inputs.Image_TAG }}"
+       #   values_files=$(find . -name "values.yaml")
+       #   for file in $values_files; do
+       #     sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
+        #    sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
+        #    echo "Updated $file"
+        #  done
+
+      - name: Find and update values.yaml
         run: |
-          new_tag="${{ github.event.inputs.Image_TAG }}"
-          values_files=$(find . -name "values.yaml")
-          for file in $values_files; do
-            sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
-            sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
-            echo "Updated $file"
-          done
+          new_tag="${{ github.event.inputs.IMAGE_TAG }}"
+          
+          # Find the values.yaml file in the repository
+          values_file=$(find . -name "values.yaml")
+  
+          # Replace any prefix before the '/' in the repository field with 'mosipid'
+          yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$values_file"
+          
+          # Replace the tag with the provided input
+          yq eval ".image.tag = \"$new_tag\"" -i "$values_file"  
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6.1.0

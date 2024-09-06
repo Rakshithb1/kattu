@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       IMAGE_TAG:
-        description: 'New tag to replace in values.yaml'
+        description: 'Tag to replace in values.yaml'
         required: true
         type: string
       BASE:

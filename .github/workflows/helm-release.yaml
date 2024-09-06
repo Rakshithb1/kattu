@@ -13,25 +13,11 @@ on:
         type: string
       CHART_VERSION:
         description: 'Version to update in Chart.yaml files'
-        required: false
-        type: string
-      OLD_TAG:
-        description: 'Old tag to replace in values.yaml (e.g., tag: develop)'
-        required: false
-        default: 'tag: develop'
-        type: string
-      NEW_TAG:
-        description: 'New tag to replace in values.yaml (e.g., tag: 1.0.0)'
         required: true
-        default: 'tag: 1.0.0'
         type: string
-      OLD_IMAGE:
-        description: 'Old Docker image to replace (e.g., mosipqa/)'
-        required: false
-        type: string
-      NEW_IMAGE:
-        description: 'New Docker image to replace with (e.g., mosipid/)'
-        required: false
+      IMAGE_TAG:
+        description: 'New tag to replace in values.yaml'
+        required: true
         type: string
       BASE:
         description: 'base branch for PR'
@@ -39,7 +25,7 @@ on:
         type: string
       COMMIT_MESSAGE:
         description: 'commit message'
-        required: false
+        required: true
         type: string
     secrets:
       ACTION_PAT:
@@ -63,25 +49,20 @@ jobs:
   
       - name: Find and update all values.yaml files
         run: |
-          new_tag="${{ github.event.inputs.NEW_TAG }}"
+          new_tag="${{ github.event.inputs.Image_TAG }}"
           
           # Find all values.yaml files in the repository
           values_files=$(find . -name "values.yaml")
-  
-          if [ -z "$values_files" ]; then
-            echo "No values.yaml files found in the repository."
-            exit 1
-          fi
   
           # Loop through each found values.yaml file and update it
           for file in $values_files; do
             echo "Processing $file"
             
             # Replace the repository prefix with 'mosipid'
-            yq eval 'select(di == 0) | .. | select(has("repository")) | .repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
           
             # Replace the tag with the provided input
-            yq eval "select(di == 0) | .. | select(has(\"tag\")) | .tag = \"$new_tag\"" -i "$file"
+            sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
   
             echo "Updated $file"
           done

@@ -73,7 +73,7 @@ jobs:
           
           # Find the values.yaml file in the repository
           values_file=$(find . -name "values.yaml")
-
+          echo "test $values_file"
           for file in $values_files; do
             echo "Processing $file"
             # Replace any prefix before the '/' in the repository field with 'mosipid'

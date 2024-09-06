@@ -62,9 +62,7 @@ jobs:
             echo "Processing $file"
             yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
             #yq eval ".image.tag = \"$new_tag\"" -i "$file"
-            yq eval .image.tag = \"$new_tag\" -i "$file"
-            #yq eval '.image.tag = "'$new_tag'"' -i "$file"
-            #yq eval ".image.tag = strenv(new_tag)" -i "$file"
+            yq eval ".image.tag = strenv(new_tag)" -i "$file"
             echo "Updated $file"
           done
           

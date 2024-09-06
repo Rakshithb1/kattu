@@ -40,34 +40,26 @@ jobs:
           repository: ${{ inputs.REPO_URL }}
           ref: ${{ inputs.REPO_BRANCH }}
 
-      - name: Install yq
+      - name: Find and Update Chart Versions
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget
-          sudo wget https://github.com/mikefarah/yq/releases/download/v4.30.8/yq_linux_amd64 -O /usr/bin/yq
-          sudo chmod +x /usr/bin/yq
+          VERSION_INPUT="${{ github.event.inputs.CHART_VERSION }}"
+          find . -type f -name Chart.yaml | while read -r chart_file; do
+            sed -i "s/^version: .*/version: $VERSION_INPUT/" "$chart_file"
+            echo "Updated version in $chart_file to $VERSION_INPUT"
+          done     
+
   
-      - name: Find and update all values.yaml files
+      - name: Find and update repository and tag
         run: |
           new_tag="${{ github.event.inputs.Image_TAG }}"
-          
-          # Find all values.yaml files in the repository
           values_files=$(find . -name "values.yaml")
-  
-          # Loop through each found values.yaml file and update it
           for file in $values_files; do
             echo "Processing $file"
-            
-            # Replace the repository prefix with 'mosipid'
             sed -i -E 's|(repository:.*)([^/]*mosip[^/]*)|\1mosipid|' "$file"
-          
-            # Replace the tag with the provided input
             sed -i "/repository:.*mosip/{n;s/tag: .*/tag: $new_tag/}" "$file"
-  
             echo "Updated $file"
           done
 
-          
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6.1.0
         with:

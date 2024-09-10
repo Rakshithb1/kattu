@@ -60,6 +60,7 @@ jobs:
             yq eval "if .image.tag then .image.tag = \"$new_tag\" else . end" -i "$file"
             yq eval 'if .job.image.repository then .job.image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
             yq eval "if .job.image.tag then .job.image.tag = \"$new_tag\" else . end" -i "$file"
+
             echo "Updated $file"
           done
     

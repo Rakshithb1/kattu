@@ -58,14 +58,14 @@ jobs:
           for file in $values_files; do
             echo "Processing $file"
             
-           yq e '
-            if .image.repository then 
-              .image.repository |= sub("^[^/]+", "mosipid") 
-            else . end |
-            if .image.tag then 
-              .image.tag = strenv(new_tag) 
-            else . end
-          ' --arg new_tag "$new_tag" "$file"
+            IMAGE_TAG="$new_tag" yq e '
+              if .image.repository then 
+                .image.repository |= sub("^[^/]+", "mosipid") 
+              else . end |
+              if .image.tag then 
+                .image.tag = env(IMAGE_TAG) 
+              else . end
+            ' -i "$file"
             
       
             

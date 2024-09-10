@@ -59,11 +59,8 @@ jobs:
             echo "Processing $file"
             
             IMAGE_TAG="$new_tag" yq e '
-              select(has("image")) | 
-              select(.image.repository) | 
-              .image.repository |= sub("^[^/]+", "mosipid") |
-              select(.image.tag) | 
-              .image.tag = env(IMAGE_TAG)
+              .image.repository |= select(. != null) | sub("^[^/]+", "mosipid") |
+              .image.tag |= select(. != null) | env(IMAGE_TAG)
             ' -i "$file"
             
       

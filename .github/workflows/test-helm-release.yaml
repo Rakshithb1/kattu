@@ -56,10 +56,11 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
-            yq eval 'if .image.repository then .image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
-            yq eval "if .image.tag then .image.tag = \"$new_tag\" else . end" -i "$file"
-            yq eval 'if .job.image.repository then .job.image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
-            yq eval "if .job.image.tag then .job.image.tag = \"$new_tag\" else . end" -i "$file"
+            yq eval 'if has("image") and .image.repository then .image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
+            yq eval "if has(\"image\") and .image.tag then .image.tag = \"$new_tag\" else . end" -i "$file"
+            yq eval 'if has("job") and .job.image.repository then .job.image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
+            yq eval "if has(\"job\") and .job.image.tag then .job.image.tag = \"$new_tag\" else . end" -i "$file"
+
             echo "Updated $file"
           done
     

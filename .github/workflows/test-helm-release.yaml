@@ -58,10 +58,14 @@ jobs:
           for file in $values_files; do
             echo "Processing $file"
             
-            IMAGE_TAG="$new_tag" yq e '
-              .image.repository |= select(. != null) | sub("^[^/]+", "mosipid") |
-              .image.tag |= select(. != null) | env(IMAGE_TAG)
-            ' -i "$file"
+             IMAGE_TAG="$new_tag" yq e '
+                if .image.repository then 
+                  .image.repository |= sub("^[^/]+", "mosipid") 
+                else . end |
+                if .image.tag then 
+                  .image.tag = env(IMAGE_TAG) 
+                else . end
+              ' "$file" > tmp.yaml && mv tmp.yaml "$file"
             
       
             

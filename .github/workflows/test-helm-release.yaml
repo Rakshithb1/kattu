@@ -59,12 +59,8 @@ jobs:
             echo "Processing $file"
             
             IMAGE_TAG="$new_tag" yq e '
-              if .image.repository then 
-                .image.repository |= sub("^[^/]+", "mosipid") 
-              else . end |
-              if .image.tag then 
-                .image.tag = env(IMAGE_TAG) 
-              else . end
+              (.image.repository // "") |= sub("^[^/]+", "mosipid") |
+              (.image.tag // "") = env(IMAGE_TAG)
             ' -i "$file"
             
       

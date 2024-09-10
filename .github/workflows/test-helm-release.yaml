@@ -57,10 +57,33 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
-            yq eval 'if has("image") and .image.repository then .image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
-            yq eval "if has(\"image\") and .image.tag then .image.tag = \"$new_tag\" else . end" -i "$file"
-            yq eval 'if has("job") and .job.image.repository then .job.image.repository |= sub("^[^/]+", "mosipid") else . end' -i "$file"
-            yq eval "if has(\"job\") and .job.image.tag then .job.image.tag = \"$new_tag\" else . end" -i "$file"
+            # Update .image.repository if it exists
+            if yq eval '.image.repository' "$file" > /dev/null 2>&1; then
+              yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            else
+              echo ".image.repository not found in $file, skipping"
+            fi
+      
+            # Update .image.tag if it exists
+            if yq eval '.image.tag' "$file" > /dev/null 2>&1; then
+              yq eval ".image.tag = \"$new_tag\"" -i "$file"
+            else
+              echo ".image.tag not found in $file, skipping"
+            fi
+      
+            # Update .job.image.repository if it exists
+            if yq eval '.job.image.repository' "$file" > /dev/null 2>&1; then
+              yq eval '.job.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+            else
+              echo ".job.image.repository not found in $file, skipping"
+            fi
+      
+            # Update .job.image.tag if it exists
+            if yq eval '.job.image.tag' "$file" > /dev/null 2>&1; then
+              yq eval ".job.image.tag = \"$new_tag\"" -i "$file"
+            else
+              echo ".job.image.tag not found in $file, skipping"
+            fi
 
             echo "Updated $file"
           done

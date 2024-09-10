@@ -50,6 +50,7 @@ jobs:
  
       - name: Find and update values.yaml
         run: |
+          yq --version
           new_tag="${{ github.event.inputs.IMAGE_TAG }}"
           
           # Find the values.yaml file in the repository

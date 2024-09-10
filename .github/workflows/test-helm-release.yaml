@@ -57,33 +57,18 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
-            # Update .image.repository if it exists
-            if yq eval '.image.repository // empty' "$file" > /dev/null; then
-              yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
-            else
-              echo ".image.repository not found in $file, skipping"
-            fi
+            
+           yq e '
+            if .image.repository then 
+              .image.repository |= sub("^[^/]+", "mosipid") 
+            else . end |
+            if .image.tag then 
+              .image.tag = strenv(new_tag) 
+            else . end
+          ' --arg new_tag "$new_tag" "$file"
+            
       
-            # Update .image.tag if it exists
-            if yq eval '.image.tag // empty' "$file" > /dev/null; then
-              yq eval ".image.tag = \"$new_tag\"" -i "$file"
-            else
-              echo ".image.tag not found in $file, skipping"
-            fi
-      
-            # Update .job.image.repository if it exists
-            if yq eval '.job.image.repository // empty' "$file" > /dev/null; then
-              yq eval '.job.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
-            else
-              echo ".job.image.repository not found in $file, skipping"
-            fi
-      
-            # Update .job.image.tag if it exists
-            if yq eval '.job.image.tag // empty' "$file" > /dev/null; then
-              yq eval ".job.image.tag = \"$new_tag\"" -i "$file"
-            else
-              echo ".job.image.tag not found in $file, skipping"
-            fi
+            
 
             echo "Updated $file"
           done

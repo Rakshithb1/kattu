@@ -57,7 +57,7 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
-            yq eval 'select(has("image")) |= sub("^[^/]+", "mosipid") | .image.tag = env(new_tag)  -i "$file"
+            yq eval 'select(has("image")) |= sub("^[^/]+", "mosipid") | .image.tag = env(new_tag)'  -i "$file"
             echo "Updated $file"
           done
     

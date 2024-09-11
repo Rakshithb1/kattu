@@ -52,7 +52,7 @@ jobs:
         run: |
           yq --version
           new_tag="${{ github.event.inputs.IMAGE_TAG }}"
-          
+          export new_tag
           # Find the values.yaml file in the repository
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do

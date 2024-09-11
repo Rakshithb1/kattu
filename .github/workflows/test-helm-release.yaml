@@ -58,7 +58,8 @@ jobs:
           for file in $values_files; do
             echo "Processing $file"
             
-            if yq eval '.image' "$file" | grep -qv 'null'; then
+            #if yq eval '.image' "$file" | grep -qv 'null'; then
+            if yq eval '.image' "$file"; then
               yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
               yq eval '.image.tag |= env(new_tag)' -i "$file"
              fi

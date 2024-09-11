@@ -57,11 +57,17 @@ jobs:
           values_files=$(find . -name "values.yaml")
           for file in $values_files; do
             echo "Processing $file"
+            
             if yq eval '.image' "$file" | grep -qv 'null'; then
               yq eval '.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
               yq eval '.image.tag |= env(new_tag)' -i "$file"
              fi
-             
+
+             if yq eval '.job' "$file" | grep -qv 'null'; then
+              yq eval '.job.image.repository |= sub("^[^/]+", "mosipid")' -i "$file"
+              yq eval '.job.image.tag |= env(new_tag)' -i "$file"
+             fi
+      
             echo "Updated $file"
           done
     

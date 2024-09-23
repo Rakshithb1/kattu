@@ -125,8 +125,9 @@ jobs:
           fi
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
+          docker images
           #docker tag $SERVICE_NAME $IMAGE_ID:$VERSION
-          docker-squash -t 
+          docker-squash -t $IMAGE_ID:$VERSION $SERVICE_NAME
           docker push $IMAGE_ID:$VERSION
 
       - uses: 8398a7/action-slack@v3

@@ -48,9 +48,9 @@ jobs:
           name: ${{ inputs.BUILD_ARTIFACT }}
           path: ./
 
-      - name: Install docker-squash
-        run: |
-          pip install docker-squash
+      #- name: Install docker-squash
+        #run: |
+          #pip install docker-squash
           
       - name: Setup branch and env
         run: |

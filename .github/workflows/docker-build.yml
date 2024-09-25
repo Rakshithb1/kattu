@@ -48,14 +48,6 @@ jobs:
           name: ${{ inputs.BUILD_ARTIFACT }}
           path: ./
 
-      - name: Check Python and pip versions
-        run: |
-          python --version
-          pip --version
-          python3 --version
-          pip3 --version
-    
-
       - name: Install docker-squash
         run: |
           pip install docker-squash

@@ -53,6 +53,7 @@ jobs:
           python --version
           pip --version
           python3 --version
+          pip3 --version
     
 
       - name: Install docker-squash

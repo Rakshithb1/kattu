@@ -52,7 +52,11 @@ jobs:
           path: ./
 
       - name: Install docker-squash
-        run: pip install docker-squash    
+        run: pip install docker-squash 
+
+      - name: Debug Inputs
+        run: echo "SQUASH_LAYERS is '${{ inputs.SQUASH_LAYERS }}'"
+  
 
       - name: Setup branch and env
         run: |

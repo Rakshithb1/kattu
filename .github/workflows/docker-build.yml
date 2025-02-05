@@ -23,7 +23,7 @@ on:
         default: false
       SQUASH_LAYERS:
         required: false
-        type: string   
+        type: number
 
     secrets:
       RELEASE_DOCKER_HUB:
